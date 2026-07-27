@@ -35,7 +35,7 @@
 *{box-sizing:border-box}
 body{margin:0;background:linear-gradient(160deg,#EAF2E4,#CFE3D3);font-family:'Sarabun',sans-serif;color:var(--ink);display:flex;justify-content:center;padding:24px 12px;min-height:100vh}
 h1,h2,h3,.display{font-family:'Baloo 2',sans-serif;font-weight:700;margin:0}
-.app{width:100%;max-width:420px;background:linear-gradient(165deg,var(--bg1),var(--bg2));border-radius:32px;border:none;min-height:780px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(15,41,33,0.35)}
+.app{width:100%;max-width:420px;background:linear-gradient(165deg,var(--bg1),var(--bg2));border-radius:32px;border:none;min-height:780px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(15,41,33,0.35);position:relative}
 .screen{display:none;flex-direction:column;flex:1;padding:24px 20px;position:relative;color:var(--ink-inverse)}
 .screen.active{display:flex}
 .card,.hero,.opt-card,.friend-row,.heal-opt,.field,input,textarea{color:var(--ink)}
@@ -274,6 +274,10 @@ input{font-family:'Sarabun',sans-serif}
 </head>
 <body>
 <div class="app" id="app">
+  <div id="update-banner" style="display:none;position:absolute;top:0;left:0;right:0;z-index:100;background:linear-gradient(135deg,#F5B942,#EDA61C);color:#3D2900;padding:10px 14px;font-size:12px;font-weight:700;align-items:center;justify-content:space-between;gap:10px;border-radius:28px 28px 0 0">
+    <span>🔄 มีอัปเดตใหม่ กดรีเฟรชนะ</span>
+    <button onclick="location.reload()" style="background:#3D2900;color:#fff;border:none;border-radius:999px;padding:6px 12px;font-size:11px;font-weight:800;cursor:pointer;flex-shrink:0">รีเฟรชเลย</button>
+  </div>
 
 <div class="screen active" id="screen-login">
   <div class="login-blob" style="top:-40px;left:-30px;width:140px;height:140px;background:var(--brand)"></div>
@@ -824,7 +828,10 @@ input{font-family:'Sarabun',sans-serif}
     <p class="muted" style="margin:10px 0 0;font-size:11px" id="theme-label">ตอนนี้ใช้: 🌿 มินต์พาสเทล</p>
   </div>
   <button class="btn-ghost" style="width:100%;margin-bottom:8px" onclick="openTimeline()">ย้อนดูฟีลที่ผ่านมา 📅</button>
-  <button class="btn-ghost" style="width:100%;margin-top:10px" onclick="logOut()">🚪 ออกจากระบบ</button>
+  <div style="display:flex;gap:8px;margin-top:10px">
+    <button class="btn-ghost" style="flex:1" onclick="logOut()">🚪 ออกจากระบบ</button>
+    <button class="btn-ghost" style="width:44px;flex-shrink:0" onclick="location.reload()" aria-label="รีเฟรชแอป">🔄</button>
+  </div>
   <p class="center muted" style="font-size:10px;margin-top:8px">ข้อมูลของเธอปลอดภัยแน่นอน แค่ออกจากระบบบนเครื่องนี้เท่านั้น กลับมากรอกรหัสพนักงานใหม่เมื่อไหร่ก็เห็นข้อมูลเดิมครบ</p>
   <div class="navbar">
     <button class="navbtn" onclick="nav('screen-home')"><span class="ic">🏠</span>หน้าหลัก</button>
@@ -842,7 +849,7 @@ const petIcons={dog:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAA
 // ==== Google Sheet backend (Google Apps Script Web App) ====
 // 1) Deploy a Google Apps Script as a Web App (Execute as: Me, Who has access: Anyone).
 // 2) Paste its /exec URL below. Until then, all calls below fail silently (console warning only).
-const GAS_URL='https://script.google.com/macros/s/AKfycbyb6bcbt0rRB6MScVcfXhQY9-Yv0T9GtpbZIMfdYm937Z22jeafR9NwwqNyxN3QbXT-Hw/exec';
+const GAS_URL='';
 
 async function gasPost(action,payload){
   if(!GAS_URL){console.warn('[GAS not configured] would send:',action,payload);return null;}
@@ -2349,6 +2356,29 @@ function sendCustomMessage(){
   document.getElementById('msg-compose').style.display='none';
   addToPublicFeed(selectedMsgFriend.empId,selectedMsgFriend.name,text);
 }
+
+// ==== Auto update detection ====
+// Periodically checks this same page's Last-Modified header on the server.
+// If it changes while the app is open, shows a banner asking to refresh —
+// this is fully automatic, no manual version numbers to maintain.
+let appLoadedVersion=null;
+async function checkForUpdate(){
+  try{
+    const res=await fetch(window.location.href,{method:'HEAD',cache:'no-store'});
+    const v=res.headers.get('last-modified')||res.headers.get('etag');
+    if(!v)return;
+    if(appLoadedVersion===null){
+      appLoadedVersion=v;
+      return;
+    }
+    if(v!==appLoadedVersion){
+      const banner=document.getElementById('update-banner');
+      if(banner)banner.style.display='flex';
+    }
+  }catch(e){console.warn('checkForUpdate failed:',e);}
+}
+setInterval(checkForUpdate,60000);
+checkForUpdate();
 
 // Restore a previous session on load, if one was saved (skips login/pick screens)
 if(loadSession()){
