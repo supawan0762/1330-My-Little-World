@@ -82,7 +82,8 @@ input{font-family:'Sarabun',sans-serif}
 .mood-card:nth-child(6){animation-delay:1.5s}
 .mood-card.selected{box-shadow:0 0 0 3px var(--ink) inset,0 3px 8px rgba(15,41,33,0.15);transform:translateY(-2px)}
 .bubble{position:absolute;top:10px;left:50%;transform:translateX(-50%);background:#fff;color:var(--ink);border-radius:14px;padding:6px 14px;font-size:12px;font-weight:600;max-width:230px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 4px 10px rgba(43,27,69,0.12)}
-.friend-row{display:flex;align-items:center;justify-content:space-between;border-radius:18px;padding:12px 14px;margin-bottom:10px;background:#FBFAFF}
+.friend-row{display:flex;align-items:center;justify-content:space-between;border-radius:18px;padding:12px 14px;margin-bottom:10px;box-shadow:0 4px 0 rgba(0,0,0,0.04),0 6px 14px rgba(28,59,46,0.08)}
+.friend-row img.pet-icon-img{animation:mood-idle 2.4s ease-in-out infinite}
 .heal-opt{width:100%;text-align:left;border:none;background:#FBFAFF;padding:15px 16px;border-radius:18px;margin-bottom:10px;font-size:14px;font-weight:600;box-shadow:0 3px 8px rgba(43,27,69,0.06)}
 .heal-opt:active{transform:scale(0.98)}
 .heal-card{width:100%;display:flex;align-items:center;gap:12px;border:none;border-radius:18px;padding:14px 16px;text-align:left;box-shadow:0 4px 0 rgba(0,0,0,0.05),0 6px 14px rgba(0,0,0,0.08);color:#2B2313}
@@ -102,6 +103,19 @@ input{font-family:'Sarabun',sans-serif}
 @keyframes breathe{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.1) rotate(-4deg)}}
 @keyframes drift{0%{transform:translateX(0)}100%{transform:translateX(26px)}}
 .idle{animation:breathe 2.6s ease-in-out infinite;display:inline-block}
+@keyframes breathe-flip{0%,100%{transform:scaleX(-1) scale(1) rotate(0deg)}50%{transform:scaleX(-1) scale(1.1) rotate(4deg)}}
+@keyframes jump3d-flip{
+  0%{transform:scaleX(-1) perspective(300px) rotateY(0deg) scale(1,1) translateY(0)}
+  12%{transform:scaleX(-1) perspective(300px) rotateY(0deg) scale(1.18,0.82) translateY(0)}
+  40%{transform:scaleX(-1) perspective(300px) rotateY(18deg) scale(0.88,1.18) translateY(-30px)}
+  62%{transform:scaleX(-1) perspective(300px) rotateY(-14deg) scale(0.92,1.14) translateY(-34px)}
+  82%{transform:scaleX(-1) perspective(300px) rotateY(0deg) scale(1.14,0.88) translateY(-2px)}
+  100%{transform:scaleX(-1) perspective(300px) rotateY(0deg) scale(1,1) translateY(0)}
+}
+@keyframes droop-flip{0%,100%{transform:scaleX(-1) rotate(-5deg) translateY(0)}50%{transform:scaleX(-1) rotate(-9deg) translateY(3px)}}
+#pet-emoji.idle{animation:breathe-flip 2.6s ease-in-out infinite}
+#pet-emoji.jump3d{animation:jump3d-flip .75s cubic-bezier(.34,1.56,.64,1)}
+#pet-emoji.wilted{animation:droop-flip 3.2s ease-in-out infinite}
 @keyframes droop{0%,100%{transform:rotate(-5deg) translateY(0)}50%{transform:rotate(-9deg) translateY(3px)}}
 .wilted{animation:droop 3.2s ease-in-out infinite;display:inline-block;filter:grayscale(65%) brightness(0.88)}
 @keyframes leaf-fall{0%{transform:translateY(-4px) translateX(0) rotate(0deg);opacity:1}100%{transform:translateY(40px) translateX(16px) rotate(220deg);opacity:0}}
@@ -158,14 +172,32 @@ input{font-family:'Sarabun',sans-serif}
 .streak{display:flex;align-items:center;gap:4px;background:#FFF3D6;color:#9A6B00;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700}
 .eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.75);color:var(--ink);font-size:11px;font-weight:700;padding:5px 12px;border-radius:999px;box-shadow:0 2px 6px rgba(28,59,46,0.08)}
 .week-card{background:linear-gradient(160deg,var(--brand-light),#fff);box-shadow:0 4px 14px rgba(28,59,46,0.10)}
-.week-line{position:absolute;left:13px;right:13px;top:13px;height:2px;background:var(--line);z-index:0}
-.week-timeline{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1}
-.week-node{width:26px;height:26px;border-radius:50%;background:#fff;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--ink-soft-d);flex-shrink:0;box-shadow:0 0 0 3px #fff,0 0 0 4px var(--line)}
-.week-node.checked{background:linear-gradient(160deg,var(--brand),var(--brand-dark));border-color:var(--brand-dark);color:#fff;box-shadow:0 0 0 3px #fff,0 0 0 5px var(--brand),0 2px 6px rgba(28,59,46,0.25);cursor:pointer}
-.week-node.checked:active{transform:scale(0.9)}
-.week-node.today{box-shadow:0 0 0 3px #fff,0 0 0 5px var(--gold),0 2px 6px rgba(28,59,46,0.25)}
-.week-labels{display:flex;justify-content:space-between;margin-top:4px;padding:0 13px}
-.week-label{width:26px;text-align:center;font-size:9px;color:var(--ink-soft-d)}
+.brick-path-wrap{position:relative;padding-top:34px;padding-right:26px}
+.path-fence{height:12px;background:repeating-linear-gradient(90deg,#B08968 0 3px,transparent 3px 9px);opacity:.5;border-radius:2px;margin-bottom:6px}
+.path-grass{position:absolute;top:-9px;font-size:11px;pointer-events:none;opacity:.85}
+.path-house{position:absolute;right:-4px;top:-32px;font-size:24px;pointer-events:none}
+.brick-path{display:flex;gap:4px}
+.brick-path .brick-tile:nth-child(1){transform:translateY(2px) rotate(-1deg)}
+.brick-path .brick-tile:nth-child(2){transform:translateY(-3px) rotate(1deg)}
+.brick-path .brick-tile:nth-child(3){transform:translateY(3px) rotate(-2deg)}
+.brick-path .brick-tile:nth-child(4){transform:translateY(-2px) rotate(1deg)}
+.brick-path .brick-tile:nth-child(5){transform:translateY(4px) rotate(-1deg)}
+.brick-path .brick-tile:nth-child(6){transform:translateY(-3px) rotate(2deg)}
+.brick-path .brick-tile:nth-child(7){transform:translateY(1px) rotate(-1deg)}
+.brick-tile{flex:1;height:26px;border-radius:5px;background:
+    linear-gradient(160deg,#E4D6BA,#CBB88F);
+  box-shadow:inset 0 -4px 0 rgba(120,90,45,0.3),inset 0 2px 0 rgba(255,255,255,0.35),0 2px 3px rgba(28,59,46,0.1);
+  position:relative;display:flex;align-items:center;justify-content:center;
+  border:1px solid rgba(120,90,45,0.2)}
+.brick-tile:after{content:'🐾';font-size:11px;opacity:.25;filter:grayscale(1)}
+.brick-tile.done{background:linear-gradient(160deg,var(--brand),var(--brand-dark));box-shadow:inset 0 -4px 0 rgba(28,59,46,0.35),inset 0 2px 0 rgba(255,255,255,0.25),0 2px 4px rgba(28,59,46,0.25);cursor:pointer;border-color:var(--brand-dark)}
+.brick-tile.done:after{content:'🐾';opacity:.9;filter:none}
+.brick-tile.done:active{transform:scale(0.94)}
+.brick-tile.today{outline:2px solid var(--gold);outline-offset:2px}
+@keyframes bob-flip{0%,100%{transform:scaleX(-1) translateY(0)}50%{transform:scaleX(-1) translateY(-6px)}}
+.walker-on-path{position:absolute;top:0;width:34px;height:34px;transition:left .6s ease;animation:bob-flip 1s ease-in-out infinite;filter:drop-shadow(0 3px 3px rgba(0,0,0,0.3));z-index:2}
+.week-labels{display:flex;justify-content:space-between;margin-top:6px}
+.week-label{flex:1;text-align:center;font-size:9px;color:var(--ink-soft-d)}
 .day-summary-overlay{position:fixed;inset:0;background:rgba(15,41,33,0.45);display:flex;align-items:center;justify-content:center;z-index:50;padding:24px}
 .day-summary-modal{position:relative;background:#fff;border-radius:22px;padding:20px 18px;max-width:340px;width:100%;box-shadow:0 12px 32px rgba(0,0,0,0.25);animation:mood-idle .3s ease-out}
 .day-summary-close{position:absolute;top:10px;right:12px;background:none;border:none;font-size:16px;color:var(--ink-soft-d);cursor:pointer;width:28px;height:28px}
@@ -201,6 +233,8 @@ input{font-family:'Sarabun',sans-serif}
 @keyframes rain-fall{0%{transform:translateY(-20px);opacity:.9}100%{transform:translateY(280px);opacity:0}}
 .rain-drop{position:absolute;top:0;width:2px;height:16px;background:rgba(207,233,255,0.85);border-radius:2px;animation:rain-fall 1s linear infinite;z-index:2}
 .rainbow-arc{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);width:220px;height:110px;border-radius:220px 220px 0 0;border:14px solid;border-color:#FF6B6B #FFD166 #FFD166 #FF6B6B;border-bottom:none;opacity:.85;box-shadow:0 0 0 14px rgba(6,214,160,.55) inset,0 0 0 28px rgba(17,138,178,.5) inset;z-index:1}
+.rainbow-wrap{position:absolute;left:50%;top:4px;transform:translateX(-50%);width:360px;height:190px;overflow:hidden;z-index:1;pointer-events:none}
+.rainbow-band{position:absolute;left:50%;border-radius:50%;transform:translateX(-50%)}
 .login-blob{position:absolute;border-radius:50%;filter:blur(2px);opacity:0.3;z-index:0;pointer-events:none}
 .quote-chip{background:#fff;border-radius:16px;padding:12px 16px;text-align:center;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:16px;box-shadow:0 4px 10px rgba(28,59,46,0.10);transition:opacity .4s}
 .pet-avatar{width:48px;height:48px;border-radius:50%;background:var(--brand-light);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
@@ -371,9 +405,12 @@ input{font-family:'Sarabun',sans-serif}
 
   <div class="card week-card" style="margin-bottom:18px">
     <p style="font-weight:700;margin:0 0 12px;font-size:14px">เส้นทางเดินใจ 🌿 สัปดาห์นี้</p>
-    <div style="position:relative;padding:0 13px">
-      <div class="week-line"></div>
-      <div class="week-timeline" id="week-timeline"></div>
+    <div class="path-fence"></div>
+    <div class="brick-path-wrap">
+      <img id="path-walker" class="walker-on-path" alt="">
+      <span class="path-house">🏡</span>
+      <div class="brick-path" id="week-timeline"></div>
+      <div id="path-grass-layer"></div>
     </div>
     <div class="week-labels" id="week-labels"></div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
@@ -483,10 +520,12 @@ input{font-family:'Sarabun',sans-serif}
   </div>
   <p class="muted center" id="heal-sub" style="margin-bottom:16px"></p>
   <div id="heal-list" style="display:flex;flex-direction:column;gap:10px">
-    <button class="heal-card" style="background:linear-gradient(160deg,#FDE9C9,#FBD48A)" data-type="audio" data-src-list="https://raw.githubusercontent.com/supawan0762/1330-assets/1d6091601878fc1c172aca8f48139bd1da54fe12/calm-music.mp3.mp3,https://raw.githubusercontent.com/supawan0762/1330-assets/1d6091601878fc1c172aca8f48139bd1da54fe12/calm2-music.mp3.mp3,https://raw.githubusercontent.com/supawan0762/1330-assets/1d6091601878fc1c172aca8f48139bd1da54fe12/calm3-music.mp3.mp3" data-min="4" onclick="startHeal(this)"><span class="heal-card-icon">🎵</span><div><div class="heal-card-title">ดนตรีกล่อมใจ</div><div class="heal-card-sub">4 นาที ผ่อนคลายไปกับเพลง</div></div></button>
+    <button class="heal-card" style="background:linear-gradient(160deg,#FDE9C9,#FBD48A)" data-type="audio" data-src="https://raw.githubusercontent.com/supawan0762/1330-assets/1d6091601878fc1c172aca8f48139bd1da54fe12/calm-music.mp3.mp3" data-min="2" onclick="startHeal(this)"><span class="heal-card-icon">🎵</span><div><div class="heal-card-title">ดนตรีกล่อมใจ 1</div><div class="heal-card-sub">2 นาที ผ่อนคลายไปกับเพลง</div></div></button>
+    <button class="heal-card" style="background:linear-gradient(160deg,#FBD48A,#F7C05C)" data-type="audio" data-src="https://raw.githubusercontent.com/supawan0762/1330-assets/1d6091601878fc1c172aca8f48139bd1da54fe12/calm2-music.mp3.mp3" data-min="2" onclick="startHeal(this)"><span class="heal-card-icon">🎶</span><div><div class="heal-card-title">ดนตรีกล่อมใจ 2</div><div class="heal-card-sub">2 นาที ผ่อนคลายไปกับเพลง</div></div></button>
+    <button class="heal-card" style="background:linear-gradient(160deg,#F7C05C,#F0A93C)" data-type="audio" data-src="https://raw.githubusercontent.com/supawan0762/1330-assets/1d6091601878fc1c172aca8f48139bd1da54fe12/calm3-music.mp3.mp3" data-min="2" onclick="startHeal(this)"><span class="heal-card-icon">🎼</span><div><div class="heal-card-title">ดนตรีกล่อมใจ 3</div><div class="heal-card-sub">2 นาที ผ่อนคลายไปกับเพลง</div></div></button>
     <button class="heal-card" style="background:linear-gradient(160deg,#D3F3E3,#A6E7C7)" data-type="timer" data-min="3" onclick="startHeal(this)"><span class="heal-card-icon">🧘</span><div><div class="heal-card-title">ยืดเหยียดคลายเมื่อย</div><div class="heal-card-sub">3 นาที ขยับตัวสักหน่อย</div></div></button>
     <button class="heal-card" style="background:linear-gradient(160deg,#D9E4FF,#B3C7F7)" data-type="story" data-min="5" onclick="startHeal(this)"><span class="heal-card-icon">📖</span><div><div class="heal-card-title">นิยายฮีลใจสั้นๆ</div><div class="heal-card-sub">5 นาที อ่านเพลินๆ</div></div></button>
-    <button class="heal-card" style="background:linear-gradient(160deg,#E6DCFB,#C9B5F2)" data-type="audio" data-src="https://raw.githubusercontent.com/supawan0762/1330-assets/fcc09e764423d2e911ee8b2150a07f2beb449f0a/prayer-chant.mp3.mp3" data-min="3" onclick="startHeal(this)"><span class="heal-card-icon">🙏</span><div><div class="heal-card-title">สวดมนต์สั้นๆ</div><div class="heal-card-sub">3 นาที ใจสงบ</div></div></button>
+    <button class="heal-card" style="background:linear-gradient(160deg,#E6DCFB,#C9B5F2)" data-type="audio" data-src="https://raw.githubusercontent.com/supawan0762/1330-assets/fcc09e764423d2e911ee8b2150a07f2beb449f0a/prayer-chant.mp3.mp3" data-min="2" onclick="startHeal(this)"><span class="heal-card-icon">🙏</span><div><div class="heal-card-title">สวดมนต์สั้นๆ</div><div class="heal-card-sub">2 นาที ใจสงบ</div></div></button>
     <button class="heal-card" style="background:linear-gradient(160deg,#F4D9EE,#E6AEDD)" data-type="fortune" data-min="1" onclick="startHeal(this)"><span class="heal-card-icon">🔮</span><div><div class="heal-card-title">เปิดไพ่มูวันนี้</div><div class="heal-card-sub">สายมู ลุ้นดวงกันหน่อย</div></div></button>
     <button class="heal-card" style="background:linear-gradient(160deg,#FFF3B0,#FFE066)" data-type="affirm" data-min="1" onclick="startHeal(this)"><span class="heal-card-icon">🌟</span><div><div class="heal-card-title">เปิดการ์ดให้กำลังใจ</div><div class="heal-card-sub">พลังบวกสั้นๆ ให้ตัวเอง</div></div></button>
   </div>
@@ -723,7 +762,7 @@ const petIcons={dog:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAA
 // ==== Google Sheet backend (Google Apps Script Web App) ====
 // 1) Deploy a Google Apps Script as a Web App (Execute as: Me, Who has access: Anyone).
 // 2) Paste its /exec URL below. Until then, all calls below fail silently (console warning only).
-const GAS_URL='https://script.google.com/macros/s/AKfycbyb6bcbt0rRB6MScVcfXhQY9-Yv0T9GtpbZIMfdYm937Z22jeafR9NwwqNyxN3QbXT-Hw/exec';
+const GAS_URL='';
 
 async function gasPost(action,payload){
   if(!GAS_URL){console.warn('[GAS not configured] would send:',action,payload);return null;}
@@ -763,11 +802,7 @@ function logActivity(activityName){
   });
 }
 
-const state={empId:'',empName:'',pet:'',petIconKey:'dog',petName:'',gp:0,totalGp:0,streak:1,checkins:0,mood:'default',causes:[],history:[],purchased:[],wilted:false,neglectTimer:null,checkedInMoodToday:false,lastCheckinDate:null,checkinDates:[],myFriends:['DEMO-AON','DEMO-BOY','DEMO-MIN'],todayGarden:null,myFriendsData:null,publicFeed:[
-  {from:'อร',to:'บอย',text:'สู้ๆ นะวันนี้ เก่งมากที่มาเช็กอินทุกวันเลย 💛',time:'08:50'},
-  {from:'มิ้น',to:'เจได',text:'พักบ้างนะ เหนื่อยก็บอกได้เสมอเลย 🌿',time:'09:20'},
-  {from:'ฟ้าใส',to:'ต้นกล้า',text:'วันนี้ก็ยิ้มสวยเหมือนเดิมเลยนะ สู้ๆ 🌟',time:'09:45'}
-]};
+const state={empId:'',empName:'',pet:'',petIconKey:'dog',petName:'',gp:0,totalGp:0,streak:1,checkins:0,mood:'default',causes:[],history:[],purchased:[],wilted:false,neglectTimer:null,checkedInMoodToday:false,lastCheckinDate:null,checkinDates:[],fedToday:false,fedDate:null,myFriends:[],todayGarden:null,myFriendsData:null,publicFeed:[]};
 const negativeMoods=['bored','sad','angry'];
 const moodMeta={
   happy:{emoji:'😄',label:'มีความสุข',color:'#FDB813'},
@@ -823,7 +858,8 @@ function saveSession(){
       empId:state.empId,empName:state.empName,pet:state.pet,petIconKey:state.petIconKey,petName:state.petName,
       gp:state.gp,totalGp:state.totalGp,streak:state.streak,checkins:state.checkins,
       purchased:state.purchased,myFriends:state.myFriends,lastCheckinDate:state.lastCheckinDate,
-      checkedInMoodToday:state.checkedInMoodToday,history:state.history,checkinDates:state.checkinDates
+      checkedInMoodToday:state.checkedInMoodToday,history:state.history,checkinDates:state.checkinDates,
+      fedToday:state.fedToday,fedDate:state.fedDate
     }));
   }catch(e){console.warn('saveSession skipped (localStorage unavailable here):',e);}
 }
@@ -866,23 +902,19 @@ document.querySelectorAll('.mopt[data-mood-icon]').forEach(img=>{
   img.src=moodIcons[img.dataset.moodIcon];
 });
 
-const gardenFriends=[
-  {empId:'DEMO-AON',name:'อร',icon:'cat',time:'08:42'},
-  {empId:'DEMO-BOY',name:'บอย',icon:'dog',time:'08:55'},
-  {empId:'DEMO-MIN',name:'มิ้น',icon:'tree',time:'09:03'},
-  {empId:'DEMO-JAIDEE',name:'เจได',icon:'rabbit',time:'09:10'},
-  {empId:'DEMO-FASAI',name:'ฟ้าใส',icon:'fish',time:'09:20'},
-  {empId:'DEMO-TONKLA',name:'ต้นกล้า',icon:'cactus',time:'09:31'}
+const tickerFallbackMsgs=[
+  '🌱 อย่าลืมเช็กอินฟีลใจวันนี้นะ',
+  '💚 ดูแลใจตัวเองก่อน ค่อยดูแลคนอื่นนะ',
+  '🐾 คู่หูของเธอรอให้กลับมาเล่นด้วยอยู่นะ'
 ];
-const tickerMsgs=[
-  '🔥 อรเช็กอินติดกันมา 7 วันแล้ว ปังมาก!',
-  '🌟 บอยเพิ่งได้ 15 แต้มจากการฮีลใจไป',
-  '🎉 มิ้นปลดล็อกไอเทมใหม่ในร้านค้าแล้วนะ',
-  '💚 วันนี้มีเพื่อนเช็กอินไปแล้ว '+gardenFriends.length+' คน อย่าตกขบวนน้า',
-  '🔮 เจไดเพิ่งเปิดไพ่มูไปเมื่อกี้ ลองดูมั่งไหม',
-  '🐾 อย่าลืมเช็กอินวันนี้นะ เดี๋ยว streak หลุด!'
-];
-document.getElementById('ticker-track').textContent=tickerMsgs.join('　•　')+'　•　';
+async function loadTicker(){
+  const res=await gasPost('getTickerFeed',{});
+  const track=document.getElementById('ticker-track');
+  if(!track)return;
+  const msgs=(res&&Array.isArray(res.list)&&res.list.length)?res.list:tickerFallbackMsgs;
+  track.textContent=msgs.join('　•　')+'　•　';
+}
+loadTicker();
 
 function autoRoam(){
   if(state.roamTimer)clearInterval(state.roamTimer);
@@ -966,7 +998,7 @@ setInterval(rotateLoginQuote,4500);
 function nav(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  if(id==='screen-home'){updateCheckinReminder();renderWeekTimeline();}
+  if(id==='screen-home'){updateCheckinReminder();renderWeekTimeline();updateFedVisual();}
   if(id==='screen-friends'){renderFriendsList();syncFriends();}
 }
 
@@ -1307,19 +1339,24 @@ function startHeal(btn){
 }
 
 function runCountdown(minutes,el,onDone,withPetals){
-  let sec=5;
+  let sec=Math.round(minutes*60);
   const petals=['🌸','🌼','🌿','✨'];
   let pi=0;
-  el.textContent=(withPetals?petals[0]+' ':'')+'0:0'+sec;
+  function render(){
+    const m=Math.floor(sec/60);
+    const s=sec%60;
+    el.textContent=(withPetals?petals[pi]+' ':'')+m+':'+String(s).padStart(2,'0');
+  }
+  render();
   const iv=setInterval(()=>{
     sec--;
     pi=(pi+1)%petals.length;
-    el.textContent=(withPetals?petals[pi]+' ':'')+'0:0'+Math.max(sec,0);
+    render();
     if(sec<=0){
       clearInterval(iv);
       onDone();
     }
-  },700);
+  },1000);
 }
 
 function drawFortune(){
@@ -1395,24 +1432,39 @@ function renderWeekTimeline(){
   track.innerHTML='';
   labels.innerHTML='';
   closeDaySummary();
+  let latestCheckedIdx=-1;
   for(let i=0;i<7;i++){
     const d=new Date(monday);
     d.setDate(monday.getDate()+i);
     const dStr=d.toDateString();
     const isToday=dStr===today.toDateString();
     const checked=state.checkinDates.includes(dStr);
-    const node=document.createElement('div');
-    node.className='week-node'+(checked?' checked':'')+(isToday?' today':'');
-    node.textContent=checked?'✓':'';
+    if(checked)latestCheckedIdx=i;
+    const tile=document.createElement('div');
+    tile.className='brick-tile'+(checked?' done':'')+(isToday?' today':'');
     if(checked){
-      node.style.cursor='pointer';
-      node.onclick=()=>showDaySummary(dStr);
+      tile.onclick=()=>showDaySummary(dStr);
     }
-    track.appendChild(node);
+    track.appendChild(tile);
     const label=document.createElement('div');
     label.className='week-label';
     label.textContent=dayNames[d.getDay()]+' '+d.getDate();
     labels.appendChild(label);
+  }
+  const walker=document.getElementById('path-walker');
+  if(walker){
+    walker.src=petIcons[state.petIconKey]||petIcons.dog;
+    const idx=latestCheckedIdx>=0?latestCheckedIdx:0;
+    const pct=(idx+0.5)/7*100;
+    walker.style.left='calc('+pct+'% - 17px)';
+  }
+  const grassLayer=document.getElementById('path-grass-layer');
+  if(grassLayer){
+    const decorEmojis=['🌻','🌿','🌸','🌱','🌷','🌾','🌺'];
+    const spots=[0.06,0.2,0.34,0.48,0.62,0.76,0.92];
+    grassLayer.innerHTML=spots.map((p,i)=>
+      '<span class="path-grass" style="left:'+(p*100)+'%;font-size:'+(i%3===0?'14px':'11px')+'">'+decorEmojis[i%decorEmojis.length]+'</span>'
+    ).join('');
   }
 }
 
@@ -1538,6 +1590,27 @@ function careForPetHome(){
   const lines=isPlant?careLinesPlant:careLinesAnimal;
   document.getElementById('bubble').textContent=lines[Math.floor(Math.random()*lines.length)];
   addGp(2);
+  state.fedToday=true;
+  state.fedDate=new Date().toDateString();
+  saveSession();
+  updateFedVisual();
+}
+
+function updateFedVisual(){
+  const pet=document.getElementById('pet-emoji');
+  if(!pet)return;
+  const today=new Date().toDateString();
+  const wellFed=state.fedToday&&state.fedDate===today;
+  pet.style.width=wellFed?'104px':'96px';
+  pet.style.height=wellFed?'104px':'96px';
+  if(state.fedHeartTimer)clearInterval(state.fedHeartTimer);
+  if(wellFed){
+    state.fedHeartTimer=setInterval(()=>{
+      if(state.wilted)return;
+      const el=document.getElementById('pet-emoji');
+      if(el)spawnParticleNear('home-stage',el,'💗','bloom-particle',60,-10);
+    },9000);
+  }
 }
 
 function playWithPet(){
@@ -1629,7 +1702,7 @@ async function syncGarden(){
 }
 
 function renderGarden(){
-  const list=state.todayGarden||gardenFriends;
+  const list=state.todayGarden||[];
   document.getElementById('garden-count').textContent='วันนี้มีเพื่อน '+list.length+' คนแวะมาเช็กอินแล้ว';
 
   const map=document.getElementById('garden-pins');
@@ -1821,6 +1894,7 @@ function buyItem(id){
     }
     if(item.decor)updatePetDecor();
     saveSession();
+    gasPost('logPurchase',{empId:state.empId,petName:state.petName,itemName:item.name});
     renderShop();
   }
 }
@@ -1852,9 +1926,9 @@ function applyWeather(state_,layerId,displayId){
   const display=document.getElementById(displayId);
   layer.innerHTML='';
   if(state_==='sunny'){
-    display.innerHTML='☀️ แดดดี';
+    display.innerHTML='☀️ แดดดี 32°C';
   }else if(state_==='rainy'){
-    display.innerHTML='🌧️ ฝนตกปรอยๆ';
+    display.innerHTML='🌧️ ฝนตกปรอยๆ 24°C';
     for(let i=0;i<14;i++){
       const drop=document.createElement('span');
       drop.className='rain-drop';
@@ -1864,10 +1938,22 @@ function applyWeather(state_,layerId,displayId){
       layer.appendChild(drop);
     }
   }else if(state_==='rainbow'){
-    display.innerHTML='🌈 รุ้งขึ้นแล้ว';
-    const arc=document.createElement('div');
-    arc.className='rainbow-arc';
-    layer.appendChild(arc);
+    display.innerHTML='🌈 รุ้งขึ้นแล้ว 27°C';
+    const wrap=document.createElement('div');
+    wrap.className='rainbow-wrap';
+    const R=190;
+    const colors=['rgba(255,179,201,.28)','rgba(255,208,140,.25)','rgba(255,244,163,.25)','rgba(179,229,197,.28)','rgba(174,209,255,.28)','rgba(214,196,255,.28)'];
+    colors.forEach((c,i)=>{
+      const size=(R*2)-i*32;
+      const band=document.createElement('div');
+      band.className='rainbow-band';
+      band.style.width=size+'px';
+      band.style.height=size+'px';
+      band.style.top=(R-size/2)+'px';
+      band.style.background=c;
+      wrap.appendChild(band);
+    });
+    layer.appendChild(wrap);
   }
 }
 
@@ -1881,27 +1967,7 @@ function cycleGardenWeather(){
 function cycleWeather(){
   const order=['sunny','rainy','rainbow'];
   weatherState=order[(order.indexOf(weatherState)+1)%order.length];
-  const layer=document.getElementById('weather-layer');
-  const display=document.getElementById('weather-display');
-  layer.innerHTML='';
-  if(weatherState==='sunny'){
-    display.innerHTML='☀️ แดดดี 32°C';
-  }else if(weatherState==='rainy'){
-    display.innerHTML='🌧️ ฝนตกปรอยๆ 24°C';
-    for(let i=0;i<14;i++){
-      const drop=document.createElement('span');
-      drop.className='rain-drop';
-      drop.style.left=(Math.random()*100)+'%';
-      drop.style.animationDelay=(Math.random()*1)+'s';
-      drop.style.animationDuration=(0.7+Math.random()*0.5)+'s';
-      layer.appendChild(drop);
-    }
-  }else if(weatherState==='rainbow'){
-    display.innerHTML='🌈 รุ้งขึ้นแล้ว 27°C';
-    const arc=document.createElement('div');
-    arc.className='rainbow-arc';
-    layer.appendChild(arc);
-  }
+  applyWeather(weatherState,'weather-layer','weather-display');
 }
 
 function doWalk(){
@@ -1930,8 +1996,7 @@ async function syncFriends(){
   if(res&&Array.isArray(res.list)){
     state.myFriendsData=res.list;
   }else{
-    // demo fallback: resolve local friend empIds against the mock garden data
-    state.myFriendsData=gardenFriends.filter(f=>state.myFriends.includes(f.empId));
+    state.myFriendsData=[];
   }
   renderFriendsList();
 }
@@ -1939,19 +2004,27 @@ async function syncFriends(){
 function renderFriendsList(){
   const list=document.getElementById('friend-list');
   if(!list)return;
-  const data=state.myFriendsData||gardenFriends.filter(f=>state.myFriends.includes(f.empId));
+  const data=state.myFriendsData||[];
   list.innerHTML='';
   if(data.length===0){
     list.innerHTML='<p class="muted center" style="padding:20px 0">ยังไม่มีเพื่อนเลย ไปเจอกันที่สวนรวมพลัง 1330 แล้วกดเพิ่มเพื่อนกันเถอะ 🌻</p>';
     return;
   }
-  data.forEach(f=>{
+  const rowColors=[
+    'linear-gradient(160deg,#FFE9C2,#FFD27A)',
+    'linear-gradient(160deg,#C9F2D8,#8FE0B3)',
+    'linear-gradient(160deg,#D6E4FF,#A9C4FA)',
+    'linear-gradient(160deg,#FCD9E8,#F5A9C8)',
+    'linear-gradient(160deg,#E6D9FF,#C4A9F5)'
+  ];
+  data.forEach((f,idx)=>{
     const icon=f.icon||'dog';
     const row=document.createElement('div');
     row.className='friend-row';
+    row.style.background=rowColors[idx%rowColors.length];
     row.dataset.empid=f.empId;
     row.dataset.name=f.name;
-    row.innerHTML='<div style="display:flex;align-items:center;gap:10px"><img class="pet-icon-img" data-icon="'+icon+'" alt="" style="width:32px;height:32px" src="'+petIcons[icon]+'"><div><p style="margin:0;font-size:14px;font-weight:600">'+f.name+'</p><p class="muted" style="margin:0">เพื่อนในสวนรวมพลัง</p></div></div><div style="display:flex;gap:6px"><button class="btn-ghost" style="padding:8px 10px;font-size:11.5px" onclick="cheer(this)">💌 กำลังใจ</button><button class="btn-ghost" style="padding:8px 10px;font-size:11.5px" onclick="openMsgCompose(\''+f.empId+'\',\''+f.name+'\')">✍️ ข้อความ</button></div>';
+    row.innerHTML='<div style="display:flex;align-items:center;gap:10px"><img class="pet-icon-img" data-icon="'+icon+'" alt="" style="width:42px;height:42px" src="'+petIcons[icon]+'"><div><p style="margin:0;font-size:14px;font-weight:700">'+f.name+'</p><p style="margin:0;font-size:11px;opacity:.7">เพื่อนในสวนรวมพลัง</p></div></div><div style="display:flex;gap:6px"><button class="btn-ghost" style="padding:8px 10px;font-size:11.5px;background:rgba(255,255,255,0.75)" onclick="cheer(this)">💌 กำลังใจ</button><button class="btn-ghost" style="padding:8px 10px;font-size:11.5px;background:rgba(255,255,255,0.75)" onclick="openMsgCompose(\''+f.empId+'\',\''+f.name+'\')">✍️ ข้อความ</button></div>';
     list.appendChild(row);
   });
 }
