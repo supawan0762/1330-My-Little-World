@@ -849,7 +849,7 @@ const petIcons={dog:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAA
 // ==== Google Sheet backend (Google Apps Script Web App) ====
 // 1) Deploy a Google Apps Script as a Web App (Execute as: Me, Who has access: Anyone).
 // 2) Paste its /exec URL below. Until then, all calls below fail silently (console warning only).
-const GAS_URL='https://script.google.com/macros/s/AKfycbyb6bcbt0rRB6MScVcfXhQY9-Yv0T9GtpbZIMfdYm937Z22jeafR9NwwqNyxN3QbXT-Hw/exec';
+const GAS_URL='';
 
 async function gasPost(action,payload){
   if(!GAS_URL){console.warn('[GAS not configured] would send:',action,payload);return null;}
@@ -1237,7 +1237,9 @@ function finishGame(){
   state.gameDate=new Date().toDateString();
   addGp(10);
   saveSession();
+  gasPost('logActivity',{empId:state.empId,empName:state.empName,activity:'เกมความจำ 🧩',timestamp:new Date().toISOString()});
   document.getElementById('game-done').style.display='block';
+  renderQuestList();
 }
 
 let secretTapCount=0;
@@ -1342,6 +1344,33 @@ async function login(){
   const result=await gasPost('getEmployee',{empId:v});
   state.empName=(result&&result.name)?result.name:('พนักงาน '+v.slice(-3));
   document.getElementById('login-msg').textContent='สวัสดีคุณ '+state.empName+' 👋';
+
+  // Restore real check-in history from the server, so logging out/in (or a
+  // new device) never loses today's check-in — the server is the source of truth.
+  if(result&&Array.isArray(result.checkinDates)){
+    state.checkinDates=result.checkinDates.map(ymd=>{
+      const [y,m,d]=ymd.split('-').map(Number);
+      return new Date(y,m-1,d).toDateString();
+    });
+    const todayStr=new Date().toDateString();
+    if(result.checkedInToday){
+      state.checkedInMoodToday=true;
+      state.lastCheckinDate=todayStr;
+    }
+    if(result.healedToday){
+      state.healedToday=true;
+      state.healedDate=todayStr;
+    }
+    if(result.gamePlayedToday){
+      state.gamePlayedToday=true;
+      state.gameDate=todayStr;
+    }
+    if(result.cheeredToday){
+      state.cheeredToday=true;
+      state.cheeredDate=todayStr;
+    }
+  }
+
   if(result&&result.petIconKey){
     // returning user on a new device — restore their existing companion instead of re-picking
     state.pet=result.pet||result.petIconKey;
@@ -1349,6 +1378,7 @@ async function login(){
     state.petName=result.petName||state.pet;
     setTimeout(()=>{applySessionToUI();saveSession();},500);
   }else{
+    saveSession();
     setTimeout(()=>nav('screen-pick'),500);
   }
 }
