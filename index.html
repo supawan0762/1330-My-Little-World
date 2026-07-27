@@ -277,10 +277,10 @@ input{font-family:'Sarabun',sans-serif}
     <div style="width:32px"></div>
   </div>
   <div class="grid2" style="gap:10px;margin-bottom:14px">
-    <div class="card center"><p class="muted" style="margin:0;font-size:11px">เช็กอินวันนี้</p><h3 style="font-size:20px;margin:4px 0 0">186<span style="font-size:11px;font-weight:400"> /210</span></h3></div>
-    <div class="card center"><p class="muted" style="margin:0;font-size:11px">เครียด/ท้อวันนี้</p><h3 style="font-size:20px;margin:4px 0 0;color:var(--red)">18%</h3></div>
-    <div class="card center"><p class="muted" style="margin:0;font-size:11px">ทำกิจกรรมฮีลใจ</p><h3 style="font-size:20px;margin:4px 0 0">142</h3></div>
-    <div class="card center"><p class="muted" style="margin:0;font-size:11px">แต้มเฉลี่ย/คน</p><h3 style="font-size:20px;margin:4px 0 0">312</h3></div>
+    <div class="card center"><p class="muted" style="margin:0;font-size:11px">เช็กอินวันนี้</p><h3 style="font-size:20px;margin:4px 0 0" id="admin-stat-checkins">- <span style="font-size:11px;font-weight:400">/-</span></h3></div>
+    <div class="card center"><p class="muted" style="margin:0;font-size:11px">เครียด/ท้อวันนี้</p><h3 style="font-size:20px;margin:4px 0 0;color:var(--red)" id="admin-stat-stress">-%</h3></div>
+    <div class="card center"><p class="muted" style="margin:0;font-size:11px">ทำกิจกรรมฮีลใจวันนี้</p><h3 style="font-size:20px;margin:4px 0 0" id="admin-stat-activities">-</h3></div>
+    <div class="card center"><p class="muted" style="margin:0;font-size:11px">เช็กอินสะสมทั้งหมด</p><h3 style="font-size:20px;margin:4px 0 0" id="admin-stat-total">-</h3></div>
   </div>
   <div class="card" style="margin-bottom:14px">
     <p style="font-weight:700;margin:0 0 10px;font-size:13px">สัดส่วนอารมณ์วันนี้</p>
@@ -483,10 +483,10 @@ input{font-family:'Sarabun',sans-serif}
   </div>
   <p class="muted center" id="heal-sub" style="margin-bottom:16px"></p>
   <div id="heal-list" style="display:flex;flex-direction:column;gap:10px">
-    <button class="heal-card" style="background:linear-gradient(160deg,#FDE9C9,#FBD48A)" data-type="audio" data-src-list="https://drive.google.com/uc?export=download&confirm=t&id=1vHV1nrTg1fNqTncUZ82NQHI9iIWvloky,https://drive.google.com/uc?export=download&confirm=t&id=1e7EvV2-zRdc3PXrHzR11aDjf2ImNRua-,https://drive.google.com/uc?export=download&confirm=t&id=1hW6XmIqh28aCDI28QSX4IG66Ckt5fNgr" data-min="4" onclick="startHeal(this)"><span class="heal-card-icon">🎵</span><div><div class="heal-card-title">ดนตรีกล่อมใจ</div><div class="heal-card-sub">4 นาที ผ่อนคลายไปกับเพลง</div></div></button>
+    <button class="heal-card" style="background:linear-gradient(160deg,#FDE9C9,#FBD48A)" data-type="audio" data-src-list="https://raw.githubusercontent.com/supawan0762/1330-assets/1d6091601878fc1c172aca8f48139bd1da54fe12/calm-music.mp3.mp3,https://raw.githubusercontent.com/supawan0762/1330-assets/1d6091601878fc1c172aca8f48139bd1da54fe12/calm2-music.mp3.mp3,https://raw.githubusercontent.com/supawan0762/1330-assets/1d6091601878fc1c172aca8f48139bd1da54fe12/calm3-music.mp3.mp3" data-min="4" onclick="startHeal(this)"><span class="heal-card-icon">🎵</span><div><div class="heal-card-title">ดนตรีกล่อมใจ</div><div class="heal-card-sub">4 นาที ผ่อนคลายไปกับเพลง</div></div></button>
     <button class="heal-card" style="background:linear-gradient(160deg,#D3F3E3,#A6E7C7)" data-type="timer" data-min="3" onclick="startHeal(this)"><span class="heal-card-icon">🧘</span><div><div class="heal-card-title">ยืดเหยียดคลายเมื่อย</div><div class="heal-card-sub">3 นาที ขยับตัวสักหน่อย</div></div></button>
     <button class="heal-card" style="background:linear-gradient(160deg,#D9E4FF,#B3C7F7)" data-type="story" data-min="5" onclick="startHeal(this)"><span class="heal-card-icon">📖</span><div><div class="heal-card-title">นิยายฮีลใจสั้นๆ</div><div class="heal-card-sub">5 นาที อ่านเพลินๆ</div></div></button>
-    <button class="heal-card" style="background:linear-gradient(160deg,#E6DCFB,#C9B5F2)" data-type="audio" data-src="https://drive.google.com/uc?export=download&confirm=t&id=1ppwweVf0C_r17LeQvm423uAHUASjEluD" data-min="3" onclick="startHeal(this)"><span class="heal-card-icon">🙏</span><div><div class="heal-card-title">สวดมนต์สั้นๆ</div><div class="heal-card-sub">3 นาที ใจสงบ</div></div></button>
+    <button class="heal-card" style="background:linear-gradient(160deg,#E6DCFB,#C9B5F2)" data-type="audio" data-src="https://raw.githubusercontent.com/supawan0762/1330-assets/fcc09e764423d2e911ee8b2150a07f2beb449f0a/prayer-chant.mp3.mp3" data-min="3" onclick="startHeal(this)"><span class="heal-card-icon">🙏</span><div><div class="heal-card-title">สวดมนต์สั้นๆ</div><div class="heal-card-sub">3 นาที ใจสงบ</div></div></button>
     <button class="heal-card" style="background:linear-gradient(160deg,#F4D9EE,#E6AEDD)" data-type="fortune" data-min="1" onclick="startHeal(this)"><span class="heal-card-icon">🔮</span><div><div class="heal-card-title">เปิดไพ่มูวันนี้</div><div class="heal-card-sub">สายมู ลุ้นดวงกันหน่อย</div></div></button>
     <button class="heal-card" style="background:linear-gradient(160deg,#FFF3B0,#FFE066)" data-type="affirm" data-min="1" onclick="startHeal(this)"><span class="heal-card-icon">🌟</span><div><div class="heal-card-title">เปิดการ์ดให้กำลังใจ</div><div class="heal-card-sub">พลังบวกสั้นๆ ให้ตัวเอง</div></div></button>
   </div>
@@ -723,7 +723,7 @@ const petIcons={dog:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAA
 // ==== Google Sheet backend (Google Apps Script Web App) ====
 // 1) Deploy a Google Apps Script as a Web App (Execute as: Me, Who has access: Anyone).
 // 2) Paste its /exec URL below. Until then, all calls below fail silently (console warning only).
-const GAS_URL='https://script.google.com/macros/s/AKfycbyb6bcbt0rRB6MScVcfXhQY9-Yv0T9GtpbZIMfdYm937Z22jeafR9NwwqNyxN3QbXT-Hw/exec';
+const GAS_URL='';
 
 async function gasPost(action,payload){
   if(!GAS_URL){console.warn('[GAS not configured] would send:',action,payload);return null;}
@@ -970,22 +970,37 @@ function nav(id){
   if(id==='screen-friends'){renderFriendsList();syncFriends();}
 }
 
-async function speakText(text){
+function speakText(text){
   if(!('speechSynthesis' in window)){
     console.warn('เบราว์เซอร์นี้ยังไม่รองรับเสียงพูดอัตโนมัติ');
     return;
   }
   speechSynthesis.cancel();
   const utter=new SpeechSynthesisUtterance(text);
-  utter.lang='th-TH';
   utter.pitch=1.3;
   utter.rate=0.95;
   const voices=speechSynthesis.getVoices();
   const thaiFemale=voices.find(v=>v.lang.startsWith('th')&&/female|หญิง/i.test(v.name))
     ||voices.find(v=>v.lang.startsWith('th'))
     ||voices.find(v=>/female/i.test(v.name));
-  if(thaiFemale)utter.voice=thaiFemale;
+  if(thaiFemale){
+    // only force Thai language when we actually found a matching voice —
+    // forcing lang='th-TH' with no matching voice installed makes some
+    // browsers silently drop the utterance instead of falling back.
+    utter.voice=thaiFemale;
+    utter.lang=thaiFemale.lang;
+  }else{
+    console.warn('ไม่พบเสียงภาษาไทยในเครื่องนี้ จะใช้เสียงเริ่มต้นของเครื่องแทน');
+  }
   speechSynthesis.speak(utter);
+}
+
+// Pre-warm the voice list on page load. Chrome/Edge return an EMPTY voice
+// list on the very first call until this event fires, which otherwise makes
+// the first tap of the speaker button produce no sound.
+if('speechSynthesis' in window){
+  speechSynthesis.getVoices();
+  speechSynthesis.onvoiceschanged=function(){speechSynthesis.getVoices();};
 }
 
 let secretTapCount=0;
@@ -1014,8 +1029,8 @@ function checkAdminCode(){
   }
 }
 
-function renderAdminDashboard(){
-  const moods=[
+async function renderAdminDashboard(){
+  const mockMoods=[
     {label:'มีความสุข',pct:34,color:'#F5B942'},
     {label:'มีพลัง',pct:20,color:'#3DAE7C'},
     {label:'ชิลๆ',pct:18,color:'#FF9F55'},
@@ -1023,20 +1038,46 @@ function renderAdminDashboard(){
     {label:'หมดแรง',pct:10,color:'#8A7FD6'},
     {label:'หัวร้อน',pct:6,color:'#E0564F'}
   ];
+  const mockWatchlist=[
+    {name:'น้ำฝน ส. (ตัวอย่าง)',days:5},
+    {name:'ธนกร พ. (ตัวอย่าง)',days:3},
+    {name:'กมลชนก อ. (ตัวอย่าง)',days:3}
+  ];
+
+  document.getElementById('admin-stat-checkins').textContent='กำลังโหลด...';
+  const data=await gasPost('getDashboardData',{});
+  const isReal=data&&typeof data.totalEmployees==='number';
+
+  if(isReal){
+    document.getElementById('admin-stat-checkins').innerHTML=data.checkedInToday+' <span style="font-size:11px;font-weight:400">/'+data.totalEmployees+'</span>';
+    document.getElementById('admin-stat-stress').textContent=data.stressPct+'%';
+    document.getElementById('admin-stat-activities').textContent=data.activitiesToday;
+    document.getElementById('admin-stat-total').textContent=data.totalCheckins;
+  }else{
+    document.getElementById('admin-stat-checkins').innerHTML='186 <span style="font-size:11px;font-weight:400">/210 (ตัวอย่าง)</span>';
+    document.getElementById('admin-stat-stress').textContent='18%';
+    document.getElementById('admin-stat-activities').textContent='142';
+    document.getElementById('admin-stat-total').textContent='ตัวอย่าง';
+  }
+
+  const moods=isReal?data.moodDist:mockMoods;
   const bars=document.getElementById('admin-mood-bars');
   bars.innerHTML=moods.map(m=>
     '<div class="admin-bar-row"><span class="admin-bar-label">'+m.label+'</span><div class="admin-bar-track"><div class="admin-bar-fill" style="width:'+m.pct+'%;background:'+m.color+'"></div></div><span class="admin-bar-pct">'+m.pct+'%</span></div>'
   ).join('');
 
-  const watchlist=[
-    {name:'น้ำฝน ส.',dept:'callcenter 1330 กะเช้า',days:5},
-    {name:'ธนกร พ.',dept:'callcenter 1330 กะบ่าย',days:3},
-    {name:'กมลชนก อ.',dept:'callcenter 1330 กะดึก',days:3}
-  ];
+  const watchlist=isReal?data.watchlist:mockWatchlist;
   const wl=document.getElementById('admin-watchlist');
-  wl.innerHTML=watchlist.map(w=>
-    '<div class="watch-row"><div><p style="margin:0;font-weight:600;font-size:13px">'+w.name+'</p><p class="muted" style="margin:0;font-size:11px">'+w.dept+' · เครียดต่อเนื่อง '+w.days+' วัน</p></div><button class="btn-ghost" style="padding:6px 10px;font-size:11px" onclick="this.textContent=\'นัดแล้ว ✓\';this.disabled=true">นัดคุย</button></div>'
-  ).join('');
+  if(watchlist.length===0){
+    wl.innerHTML='<p class="muted center" style="padding:10px 0">ตอนนี้ยังไม่มีใครต้องเฝ้าระวังเป็นพิเศษ 🌿</p>';
+  }else{
+    wl.innerHTML=watchlist.map(w=>
+      '<div class="watch-row"><div><p style="margin:0;font-weight:600;font-size:13px">'+w.name+'</p><p class="muted" style="margin:0;font-size:11px">เครียด/ท้อต่อเนื่อง '+w.days+' วัน</p></div><button class="btn-ghost" style="padding:6px 10px;font-size:11px" onclick="this.textContent=\'นัดแล้ว ✓\';this.disabled=true">นัดคุย</button></div>'
+    ).join('');
+  }
+  if(!isReal){
+    wl.innerHTML+='<p class="muted center" style="font-size:10px;margin-top:8px">⚠️ ยังเชื่อมฐานข้อมูลจริงไม่ได้ กำลังโชว์ข้อมูลตัวอย่างอยู่</p>';
+  }
 }
 
 async function login(){
