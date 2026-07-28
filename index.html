@@ -189,7 +189,7 @@ input{font-family:'Sarabun',sans-serif}
 .eco-opt:nth-child(2) .eco-opt-icon{animation-delay:.3s}
 .eco-opt:nth-child(3) .eco-opt-icon{animation-delay:.6s}
 .eco-opt:nth-child(4) .eco-opt-icon{animation-delay:.9s}
-.eco-teaser{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border-radius:14px;background:linear-gradient(160deg,#A8E8C6,#5FCE94);border:none;cursor:pointer;margin-bottom:8px;box-shadow:inset 0 2px 3px rgba(255,255,255,0.6),inset 0 -4px 8px rgba(28,59,46,0.18),0 3px 8px rgba(28,59,46,0.18);overflow:hidden}
+.eco-teaser{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border-radius:14px;background:linear-gradient(160deg,var(--brand-light),#fff);border:none;cursor:pointer;margin-bottom:8px;box-shadow:0 4px 14px rgba(28,59,46,0.10);overflow:hidden}
 .eco-teaser:active{transform:scale(0.98)}
 .quest-row:active{transform:scale(0.98)}
 .quest-row.done{background:linear-gradient(135deg,var(--brand-light),#fff);cursor:default}
@@ -360,6 +360,11 @@ input{font-family:'Sarabun',sans-serif}
     <div id="admin-mood-bars"></div>
   </div>
   <div class="card" style="margin-bottom:14px">
+    <p style="font-weight:700;margin:0 0 4px;font-size:13px">🌍 สรุปรักษ์โลกวันนี้</p>
+    <p class="muted" style="margin:0 0 10px;font-size:10.5px">ภาพรวมภารกิจรักษ์โลกที่พนักงานทำวันนี้</p>
+    <div id="admin-eco-summary"></div>
+  </div>
+  <div class="card" style="margin-bottom:14px">
     <p style="font-weight:700;margin:0 0 4px;font-size:13px">📋 พนักงานที่ควรเข้าไปพูดคุย</p>
     <p class="muted" style="margin:0 0 10px;font-size:10.5px">เครียด/ท้อต่อเนื่อง 3 วันขึ้นไป (เห็นเฉพาะทีม HR)</p>
     <div id="admin-watchlist"></div>
@@ -396,7 +401,7 @@ input{font-family:'Sarabun',sans-serif}
 <div class="screen" id="screen-home">
   <div class="topbar">
     <span class="eyebrow">🌱 พลังบวกทุกวัน</span>
-    <div class="streak">🔥 <span id="streak-display">1</span> วันติด</div>
+    <div class="streak">🔥 <span id="streak-display">1</span> วันติด · 🌟 <span id="gp-display-home">0</span></div>
   </div>
 
   <p class="muted" style="margin:8px 0 0;font-size:12px">เฮ้ย! สวัสดี <span id="home-empname"></span> 👋</p>
@@ -882,7 +887,7 @@ const petIcons={dog:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAA
 // ==== Google Sheet backend (Google Apps Script Web App) ====
 // 1) Deploy a Google Apps Script as a Web App (Execute as: Me, Who has access: Anyone).
 // 2) Paste its /exec URL below. Until then, all calls below fail silently (console warning only).
-const GAS_URL='https://script.google.com/macros/s/AKfycbyb6bcbt0rRB6MScVcfXhQY9-Yv0T9GtpbZIMfdYm937Z22jeafR9NwwqNyxN3QbXT-Hw/exec';
+const GAS_URL='';
 
 async function gasPost(action,payload){
   if(!GAS_URL){console.warn('[GAS not configured] would send:',action,payload);return null;}
@@ -936,11 +941,7 @@ const moodMeta={
   bored:{emoji:'🥱',label:'เบื่อหน่าย',color:'#B79AFA'},
   angry:{emoji:'😡',label:'โกรธ',color:'#FF9791'}
 };
-state.history=[
-  {mood:'energy',dateLabel:'เมื่อวาน 09:14',causes:[],note:''},
-  {mood:'happy',dateLabel:'2 วันที่แล้ว 13:02',causes:[],note:'ได้กาแฟฟรีจากหัวหน้า'},
-  {mood:'sad',dateLabel:'3 วันที่แล้ว 20:45',causes:['ความรัก'],note:''}
-];
+state.history=[];
 
 const petLines={
   default:['สวัสดีค่ะ วันนี้เป็นไงบ้าง 💭','เหนื่อยไหม พักหน่อยนะ 🍃','คิดถึงจังเลย 💛','วันนี้ก็สู้ๆ นะ ✨'],
@@ -1010,6 +1011,8 @@ function applySessionToUI(){
   document.getElementById('streak-display').textContent=state.streak;
   document.getElementById('gp-display-park').textContent=state.gp;
   document.getElementById('profile-gp').textContent=state.gp;
+  const homeGpInit=document.getElementById('gp-display-home');
+  if(homeGpInit)homeGpInit.textContent=state.gp;
   const isPlant=plantIconKeys.includes(state.petIconKey);
   document.getElementById('care-icon').textContent=isPlant?'💧':'🍖';
   document.getElementById('care-label').textContent=isPlant?'รดน้ำ':'ให้อาหาร';
@@ -1277,14 +1280,6 @@ const ecoReactions=[
   "เก่งอ่ะ! วันนี้เธอคือคนรักษ์โลกตัวจริง ✨",
   "ฟินสุด! โลกยิ้มให้เธอแน่นอน 🌎💚"
 ];
-const ecoThemeColors={
-  water:['#A8D8F0','#5FA8D8'],
-  power:['#FFE59A','#FDC94B'],
-  waste:['#A8E8C6','#5FCE94'],
-  transit:['#FFD3AE','#FFB37A'],
-  food:['#D9E896','#A8CE5F'],
-  mix:['#D6C4F5','#B39DDB']
-};
 function renderEcoMission(){
   const teaser=document.getElementById('eco-teaser');
   const teaserIcon=document.getElementById('eco-teaser-icon');
@@ -1296,8 +1291,7 @@ function renderEcoMission(){
   const {theme,options}=getTodayEcoOptions();
   window.__todayEcoOptions=options;
   window.__todayEcoTheme=theme;
-  const colors=ecoThemeColors[theme.key]||ecoThemeColors.waste;
-  teaser.style.background='linear-gradient(160deg,'+colors[0]+','+colors[1]+')';
+  teaser.style.background='linear-gradient(160deg,var(--brand-light),#fff)';
 
   const doneToday=state.ecoDoneToday&&state.ecoDate===today;
   if(doneToday){
@@ -1308,7 +1302,7 @@ function renderEcoMission(){
     teaserIcon.innerHTML=ecoIconImages[pRest]
       ? '<img src="'+ecoIconImages[pRest]+'" style="width:100%;height:100%;object-fit:contain">'
       : pIcon;
-    teaserTitle.textContent='ทำภารกิจรักษ์โลกวันนี้แล้ว';
+    teaserTitle.innerHTML='<span style="font-size:16px;vertical-align:-2px">🌍</span> ทำภารกิจรักษ์โลกวันนี้แล้ว';
     teaserSub.innerHTML='<span class="eco-ticker-wrap"><span class="eco-ticker-track" style="font-size:10px;font-weight:700;color:var(--inkSoft,#5E7A6C)">'+(pRest?pRest+' — ':'')+(state.ecoLastReaction||'เก่งมาก! พรุ่งนี้มาทำอีกนะ 🌿')+'</span></span>';
     teaserArrow.textContent='👀';
     teaserArrow.style.display='inline';
@@ -1621,6 +1615,31 @@ async function renderAdminDashboard(){
   if(!isReal){
     wl.innerHTML+='<p class="muted center" style="font-size:10px;margin-top:8px">⚠️ ยังเชื่อมฐานข้อมูลจริงไม่ได้ กำลังโชว์ข้อมูลตัวอย่างอยู่</p>';
   }
+
+  const ecoBox=document.getElementById('admin-eco-summary');
+  if(ecoBox){
+    if(isReal){
+      const ecoRes=await gasPost('getEcoSummary',{});
+      if(ecoRes){
+        const peopleToday=ecoRes.peopleToday||0;
+        const topActions=ecoRes.topActions||[];
+        let html='<p style="margin:0 0 10px;font-size:13px"><span style="font-weight:800;color:var(--brand-dark);font-size:20px">'+peopleToday+'</span> <span class="muted">คนทำภารกิจรักษ์โลกวันนี้แล้ว</span></p>';
+        if(topActions.length===0){
+          html+='<p class="muted center" style="padding:6px 0;font-size:11px">ยังไม่มีใครทำภารกิจรักษ์โลกวันนี้เลย</p>';
+        }else{
+          html+='<p class="muted" style="margin:0 0 6px;font-size:10.5px">ทำบ่อยสุดวันนี้</p>';
+          html+=topActions.map((a,i)=>
+            '<div class="watch-row"><p style="margin:0;font-size:12px;font-weight:600;flex:1">'+(i+1)+'. '+a.text+'</p><span style="font-weight:800;color:var(--brand-dark);font-size:12px;flex-shrink:0">×'+a.count+'</span></div>'
+          ).join('');
+        }
+        ecoBox.innerHTML=html;
+      }else{
+        ecoBox.innerHTML='<p class="muted center" style="padding:10px 0;font-size:11px">ดึงข้อมูลไม่สำเร็จ ลองรีเฟรชอีกครั้ง</p>';
+      }
+    }else{
+      ecoBox.innerHTML='<p style="margin:0 0 10px;font-size:13px"><span style="font-weight:800;color:var(--brand-dark);font-size:20px">12</span> <span class="muted">คนทำภารกิจรักษ์โลกวันนี้แล้ว (ตัวอย่าง)</span></p><p class="muted" style="margin:0 0 6px;font-size:10.5px">ทำบ่อยสุดวันนี้ (ตัวอย่าง)</p><div class="watch-row"><p style="margin:0;font-size:12px;font-weight:600;flex:1">1. ถอดปลั๊กที่ไม่ใช้ ไม่เสียบทิ้งไว้</p><span style="font-weight:800;color:var(--brand-dark);font-size:12px">×5</span></div>';
+    }
+  }
 }
 
 async function login(){
@@ -1639,6 +1658,18 @@ async function login(){
       const [y,m,d]=ymd.split('-').map(Number);
       return new Date(y,m-1,d).toDateString();
     });
+    if(Array.isArray(result.history)){
+      state.history=result.history.map(h=>{
+        const [y,m,d]=h.dateKey.split('-').map(Number);
+        return {
+          mood:h.mood,
+          causes:h.causes||[],
+          note:h.note||'',
+          dateLabel:h.dateLabel,
+          dateKey:new Date(y,m-1,d).toDateString()
+        };
+      });
+    }
     const todayStr=new Date().toDateString();
     if(result.checkedInToday){
       state.checkedInMoodToday=true;
@@ -2056,6 +2087,8 @@ function addGp(n){
   state.totalGp+=n;
   document.getElementById('gp-display-park').textContent=state.gp;
   document.getElementById('profile-gp').textContent=state.gp;
+  const homeGp=document.getElementById('gp-display-home');
+  if(homeGp)homeGp.textContent=state.gp;
   const shopGp=document.getElementById('gp-display-shop');
   if(shopGp)shopGp.textContent=state.gp;
   updateLevel();
@@ -2074,19 +2107,19 @@ function spendGp(n){
 }
 
 const shopItems=[
-  {id:'treat',name:'อาหารเสริมพิเศษ',icon:'🍖',req:3,cost:20,cat:'animal'},
-  {id:'fert1',name:'ปุ๋ยสูตรเร่งโต',icon:'🌱',req:3,cost:20,cat:'plant'},
-  {id:'toy',name:'ของเล่นชิ้นโปรด',icon:'🧸',req:7,cost:40,cat:'animal'},
-  {id:'water',name:'บัวรดน้ำสวย',icon:'💧',req:7,cost:40,cat:'plant'},
-  {id:'mysterybox',name:'กล่องสุ่มสวนของฉัน',icon:'🎁',req:10,cost:50,cat:'both',mystery:true},
-  {id:'litter',name:'ทรายนุ่มพิเศษ',icon:'🪣',req:14,cost:70,cat:'cat'},
-  {id:'cathouse',name:'บ้านแมวหลังหรู',icon:'🏠',req:14,cost:70,cat:'cat'},
-  {id:'house',name:'บ้านน้อนหลังใหม่',icon:'🏠',req:14,cost:70,cat:'animal'},
-  {id:'pot',name:'กระถางลายพิเศษ',icon:'🪴',req:14,cost:70,cat:'plant'},
-  {id:'hat',name:'หมวกน่ารัก',icon:'🎩',req:14,cost:65,cat:'animal',decor:'🎩'},
-  {id:'ribbon',name:'ริบบิ้นสวย',icon:'🎀',req:14,cost:65,cat:'plant',decor:'🎀'},
-  {id:'crown',name:'มงกุฎสุดหรู',icon:'👑',req:45,cost:120,cat:'both',decor:'👑'},
-  {id:'castle',name:'บ้านในฝันหลังใหญ่',icon:'🏰',req:45,cost:120,cat:'both'}
+  {id:'treat',name:'อาหารเสริมพิเศษ',icon:'🍖',req:3,cost:500,cat:'animal'},
+  {id:'fert1',name:'ปุ๋ยสูตรเร่งโต',icon:'🌱',req:3,cost:500,cat:'plant'},
+  {id:'toy',name:'ของเล่นชิ้นโปรด',icon:'🧸',req:7,cost:1000,cat:'animal'},
+  {id:'water',name:'บัวรดน้ำสวย',icon:'💧',req:7,cost:1000,cat:'plant'},
+  {id:'mysterybox',name:'กล่องสุ่มสวนของฉัน',icon:'🎁',req:10,cost:2500,cat:'both',mystery:true},
+  {id:'litter',name:'ทรายนุ่มพิเศษ',icon:'🪣',req:14,cost:3500,cat:'cat'},
+  {id:'cathouse',name:'บ้านแมวหลังหรู',icon:'🏠',req:14,cost:3500,cat:'cat'},
+  {id:'house',name:'บ้านน้อนหลังใหม่',icon:'🏠',req:14,cost:3500,cat:'animal'},
+  {id:'pot',name:'กระถางลายพิเศษ',icon:'🪴',req:14,cost:3500,cat:'plant'},
+  {id:'hat',name:'หมวกน่ารัก',icon:'🎩',req:14,cost:3500,cat:'animal',decor:'🎩'},
+  {id:'ribbon',name:'ริบบิ้นสวย',icon:'🎀',req:14,cost:3500,cat:'plant',decor:'🎀'},
+  {id:'crown',name:'มงกุฎสุดหรู',icon:'👑',req:45,cost:5000,cat:'both',decor:'👑'},
+  {id:'castle',name:'บ้านในฝันหลังใหญ่',icon:'🏰',req:45,cost:5000,cat:'both'}
 ];
 const plantIconKeys=['tree','cactus','bamboo','rose','sunflower'];
 const plantBloomEmoji={tree:'🌱',cactus:'🌵',bamboo:'🎍',rose:'🌹',sunflower:'🌻'};
@@ -2285,7 +2318,7 @@ function renderGardenFeed(){
   const cardHtml=msg=>'<div class="card" style="padding:10px 14px"><p style="margin:0;font-size:12px"><span style="font-weight:800">'+msg.from+'</span> <span class="muted">ส่งถึง</span> <span style="font-weight:800">'+msg.to+'</span></p><p style="margin:3px 0 0;font-size:12.5px">'+msg.text+'</p></div>';
   // duplicate the list once so the loop can scroll seamlessly
   feed.innerHTML=msgs.map(cardHtml).join('')+msgs.map(cardHtml).join('');
-  feed.style.animationDuration=(msgs.length*3.5)+'s';
+  feed.style.animation='feed-scroll '+(msgs.length*3.5)+'s linear infinite';
 }
 
 function openGardenAction(empId,name,icon){
